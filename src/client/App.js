@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import $ from "jquery";
 import './app.css';
 
 export default class App extends Component {
@@ -12,6 +13,7 @@ export default class App extends Component {
       func: '',
       btmBorder: 0,
       topBorder: 0,
+      result:0,
     };
     this.handleChange = this.handleChange.bind(this);
     this.submitBtn = this.submitBtn.bind(this);
@@ -39,37 +41,66 @@ export default class App extends Component {
   
   render() {
     return (
+      <div>
+      <header>
+      <div className='rightNav'>
+        <img src='./public/img/logo.jpg'/>
+        <h1>Пчелиный алгоритм</h1>
+      </div>
+      <div className='leftNav'>
+        <a href="https://github.com/Cherkov/BeeAlgorithm">
+          <img src='./public/img/github.png'/>
+        </a>
+      </div>
+      </header>
+
       <div className="wrapper">
-        <img src="./public/img/bee.gif"/>
+        {/*<img src="./public/img/bee.gif"/>*/}
         <div className="razvedchiki">
-          <h2>Введите количество пчел-разведчиков</h2>
-           <input name='razv' onChange={this.handleChange}/>
+          <label>Введите количество пчел-разведчиков</label>
+           <input name='razv' type='number' onChange={this.handleChange}/>
         </div>
         <div className="razvedchiki">
-          <h2>Введите количество пчел-фуражиров</h2>
-           <input name='furaj' onChange={this.handleChange}/>
+          <label>Введите количество пчел-фуражиров</label>
+           <input name='furaj'  type='number' onChange={this.handleChange}/>
         </div>
         <div className="razvedchiki">
-          <h2>Введите количество лучших цветочных участков</h2>
-           <input name='bestArea' onChange={this.handleChange}/>
+          <label>Введите количество лучших цветочных участков</label>
+           <input name='bestArea' type='number' onChange={this.handleChange}/>
         </div>
         <div className="razvedchiki">
-          <h2>Введите количество итераций</h2>
-           <input name='iteration' onChange={this.handleChange}/>
+          <label>Введите количество итераций</label>
+           <input type='number' name='iteration' onChange={this.handleChange}/>
         </div>
         <div className="razvedchiki">
-          <h2>Введите целевую функцию</h2>
+          <label>Введите целевую функцию</label>
           <input name='func' onChange={this.handleChange}/>
         </div>
          <div className="razvedchiki">
-          <h2>Введите нижнюю границу</h2>
-          <input name='btmBorder' onChange={this.handleChange}/>
+          <label>Введите нижнюю границу</label>
+          <input type='number' name='btmBorder' onChange={this.handleChange}/>
         </div>
          <div className="razvedchiki">
-          <h2>Введите верхнюю границу</h2>
-          <input name='topBorder' onChange={this.handleChange}/>
+          <label>Введите верхнюю границу</label>
+          <input type='number' name='topBorder' onChange={this.handleChange}/>
         </div>
-        <button onClick={this.submitBtn}>Пащетат</button>
+        <div className="razvedchiki">
+          <label>Результат</label>
+          <input value={this.state.result} disabled/>
+        </div>
+        <div className='buttons'>
+          <div className="button" onClick={this.submitBtn}>
+            <span className="button__mask"></span>
+            <span className="button__text">Сформировать отчет</span>
+            <span className="button__text button__text--bis" onClick={this.submitBtn}>Сформировать отчет</span>
+          </div>
+          <div className="button" onClick={this.submitBtn}>
+            <span className="button__mask"></span>
+            <span className="button__text">Получить оптимальное значение</span>
+            <span className="button__text button__text--bis" onClick={this.submitBtn}>Получить оптимальное значение</span>
+          </div>
+        </div>
+      </div>
       </div>
     );
   }
