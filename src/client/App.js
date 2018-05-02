@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import $ from "jquery";
 import './app.css';
 
 export default class App extends Component {
@@ -13,13 +12,13 @@ export default class App extends Component {
       func: '',
       btmBorder: 0,
       topBorder: 0,
+      rangeArea:0,
       result:0,
     };
     this.handleChange = this.handleChange.bind(this);
     this.submitBtn = this.submitBtn.bind(this);
   }
   submitBtn(){
-    console.log(this.state)
        fetch('/api/getUsername', {
         method: 'post',
         headers: {
@@ -28,7 +27,9 @@ export default class App extends Component {
         },
         body: JSON.stringify(this.state)
       }).then(res=>res.json())
-      .then(res => console.log(res));
+      .then(res => (this.setState({
+        result: parseFloat(res.result.toFixed(2))
+      })));
   }
   handleChange(event) {
     const target = event.target;
@@ -69,6 +70,10 @@ export default class App extends Component {
            <input name='bestArea' type='number' onChange={this.handleChange}/>
         </div>
         <div className="razvedchiki">
+          <label>Введите область лучших цветочных участков</label>
+           <input name='rangeArea' type='number' onChange={this.handleChange}/>
+        </div>
+        <div className="razvedchiki">
           <label>Введите количество итераций</label>
            <input type='number' name='iteration' onChange={this.handleChange}/>
         </div>
@@ -92,12 +97,12 @@ export default class App extends Component {
           <div className="button" onClick={this.submitBtn}>
             <span className="button__mask"></span>
             <span className="button__text">Сформировать отчет</span>
-            <span className="button__text button__text--bis" onClick={this.submitBtn}>Сформировать отчет</span>
+            <span className="button__text button__text--bis">Сформировать отчет</span>
           </div>
           <div className="button" onClick={this.submitBtn}>
             <span className="button__mask"></span>
             <span className="button__text">Получить оптимальное значение</span>
-            <span className="button__text button__text--bis" onClick={this.submitBtn}>Получить оптимальное значение</span>
+            <span className="button__text button__text--bis">Получить оптимальное значение</span>
           </div>
         </div>
       </div>
