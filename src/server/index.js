@@ -6,6 +6,18 @@ const bodyParser = require('body-parser');
 const MongoClient = require('mongodb').MongoClient;
 const url = "mongodb://localhost:27017/mydb";
 
+app.get('/api/getReport', function(req, res) {
+  MongoClient.connect(url, function(err, db) {
+    if (err) throw err;
+    var dbo = db.db("bee");
+    dbo.collection("data").find({}).toArray(function(err, result) {
+    if (err) throw err;
+    console.log(result);
+    res.send(result);
+    db.close();
+    });
+  });
+});
 
 app.use(express.static("dist"));
 app.use(bodyParser.json()); // for parsing application/json
@@ -34,6 +46,8 @@ app.post("/api/getUsername", function(req, res) {
     if (err) throw err;
     console.log("1 document inserted");
   });
+  db.close();
+
 });
 } );
 app.listen(8080, () => console.log("Listening on port 8080!"));
@@ -87,9 +101,9 @@ function global(){
         }
 }        
 
-function local(dot) {
+function local(number, dot) {
       var worker;
-        for ( i = 0; i < numberOfWorker; i++) {
+        for (let i = 0; i < number; i++) {
             worker = randomDotL(dot.x, dot.y, rangeOfArea);
             if (dot.result < worker.result) {
                 dot=worker;
@@ -109,12 +123,12 @@ function findMax(dots, number){
 function  workersSplit(){
     var part = 0;
         for ( i = 0; i < numberOfAreas; i++) {
-            part += best[i].getValue();
+            part += best[i].result;
         }
         part = part / numberOfAreas;
         var workersForArea = new Array(numberOfAreas);
         for ( i = 0; i < best.length - 1; i++) {
-            workersForArea[i] =  Math.round(best[i].result() / part);
+            workersForArea[i] =  Math.round(best[i].result / part);
         }
         return workersForArea;
 }  
