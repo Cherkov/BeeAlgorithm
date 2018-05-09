@@ -49,6 +49,7 @@ export default class App extends Component {
           <a href="#/report">Отчет</a>
         </li>
       </ul>
+      
       </div>
       <div className='leftNav'>
         <a href="https://github.com/Cherkov/BeeAlgorithm">
@@ -56,7 +57,7 @@ export default class App extends Component {
         </a>
       </div>
       </header>
-      <Child/>
+      <Child name={this.state.name}/>
       </div>
     );
   }

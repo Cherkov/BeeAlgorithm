@@ -7,6 +7,12 @@
   display: flex;
   align-items: flex-start;
 }
+.-pageInfo input {
+  color: #000;
+}
+.-btn{
+  color: #fff !important;
+}
 #root > div{
   width: 100%;
 }
@@ -23,6 +29,16 @@ header{
   flex-flow: row nowrap;
   justify-content: space-between;
   background-color: #fff;
+  color: #000;
+}
+header input{
+  border-bottom: 1px solid #000;
+  color: #666 !important;
+  font-style: italic;
+  text-transform: capitalize;
+}
+.inputName{
+  display: flex;
 }
 header img{
   display: block;

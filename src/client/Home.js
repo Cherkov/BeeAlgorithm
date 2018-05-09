@@ -12,12 +12,14 @@ export default class Home extends Component {
       topBorder: 0,
       rangeArea:0,
       result:0,
+      name: ''
     };
     this.handleChange = this.handleChange.bind(this);
     this.submitBtn = this.submitBtn.bind(this);
   }
-
   submitBtn(){
+    console.log(this.props);
+    console.log(this.state)
        fetch('/api/getUsername', {
         method: 'post',
         headers: {
@@ -45,6 +47,10 @@ export default class Home extends Component {
       <div className="wrapper">
         {/*<img src="./public/img/bee.gif"/>*/}
         <div className="razvedchiki">
+          <label>Введите ваше Имя</label>
+          <input  name='name'  value={this.state.name} onChange={this.handleChange}/>
+        </div>
+        <div className="razvedchiki">
           <label>Введите количество пчел-разведчиков</label>
            <input name='razv' type='number' onChange={this.handleChange}/>
         </div>
@@ -56,6 +62,7 @@ export default class Home extends Component {
           <label>Введите количество лучших цветочных участков</label>
            <input name='bestArea' type='number' onChange={this.handleChange}/>
         </div>
+        
         <div className="razvedchiki">
           <label>Введите область лучших цветочных участков</label>
            <input name='rangeArea' type='number' onChange={this.handleChange}/>
