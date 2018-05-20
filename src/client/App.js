@@ -57,7 +57,7 @@ export default class App extends Component {
         </a>
       </div>
       </header>
-      <Child name={this.state.name}/>
+      <Child/>
       </div>
     );
   }

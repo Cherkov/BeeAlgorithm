@@ -216,6 +216,7 @@ input{
   text-align: center;
 }
 .rightNav ul{
+  list-style-type: none;
   display: flex;
   flex-flow: row nowrap;
 }

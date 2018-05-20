@@ -24,10 +24,10 @@ module.exports = {
     ]
   },
   devServer: {
-    port: 3000,
+    port: 19030,
     open: true,
     proxy: {
-      "/api": "http://localhost:8080"
+      "/api": "http://localhost:20017"
     }
   },
   plugins: [

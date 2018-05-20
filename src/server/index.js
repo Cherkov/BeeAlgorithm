@@ -51,7 +51,7 @@ app.post("/api/getUsername", function(req, res) {
 
 });
 } );
-app.listen(8080, () => console.log("Listening on port 8080!"));
+app.listen(20017, () => console.log("Listening on port 8080!"));
 var best;
 var numberOfScouts;
 var numberOfAreas;
@@ -66,16 +66,19 @@ function Algo(numberOfScoutsP,numberOfWorkersP,numberOfAreasP,numberOfIterations
    numberOfAreas=parseInt(numberOfAreasP);
    numberOfIterations=parseInt(numberOfIterationsP);
     upperLimit=parseFloat(upperLimitP);
-	lowerLimit=parseFloat(lowerLimitP);
+  lowerLimit=parseFloat(lowerLimitP);
   best=new Array(numberOfAreas);
     
  initiate();
+ var pobedka = numberOfIterations/10;
         for ( k = 0; k < numberOfIterations; k++) {
             global();
+            console.log();
             for (i = 0; i < best.length - 1; i++) {
                 var split = workersSplit(best);
                 local(split[i], best[i]);
             }
+
         }
         return best[0].result;    
     
