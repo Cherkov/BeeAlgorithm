@@ -67,14 +67,18 @@ button{
   margin: 0 auto;
 }
 .wrapper{
-  height: calc(100vh - 80px);
   background-image: url('/public/img/bg.jpg');
-  align-items: flex-end;
+  
+  position: relative;
+}
+.container{
+  z-index: 1;
   display: flex;
-  flex-flow: row wrap;
+  margin-left: 100px;
+  margin-right: 100px;
+  flex-flow: column nowrap;
   position: relative;
-  justify-content: space-between;
-  position: relative;
+  align-items: center;
 }
 .wrapper:before{
   content: '';
@@ -102,6 +106,7 @@ input:focus{
   border-bottom: 2px solid #fff;
 }
 input{
+  width: 100%;
   background-color: transparent;
   padding: 10px;
   border: none;
@@ -110,6 +115,9 @@ input{
   font-size: 18px;
   font-weight: 500;
   color: #fff;
+}
+.btmBorder{
+  margin-bottom: 20px;
 }
 .button {
   background: #111;

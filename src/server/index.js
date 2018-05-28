@@ -4,6 +4,7 @@ const math = require('mathjs');
 const app = express();
 const bodyParser = require('body-parser');
 const MongoClient = require('mongodb').MongoClient;
+var vars;
 const url = "mongodb://localhost:27017/bee";
 var name;
 app.get('/api/getReport', function(req, res) {
@@ -23,7 +24,9 @@ app.use(bodyParser.json()); // for parsing application/json
 app.post("/api/getUsername", function(req, res) {
   var state = req.body
   f = state.func;
-  var result = Algo(state.razv, state.furaj, state.bestArea,state.iteration,state.topBorder,state.btmBorder, state.rangeArea)
+  vars = state.bordersArr.join(', ');
+  console.log(vars);
+  var result = Algo(state.razv, state.furaj, state.bestArea,state.iteration,state.topBorder,state.btmBorder, state.rangeArea, state.numberOfVars)
   res.send({ result:  result })
   MongoClient.connect(url, function(err, db) {
   if (err) throw err;
@@ -37,8 +40,8 @@ app.post("/api/getUsername", function(req, res) {
     furajiri: state.furaj,
     numberOfAreas: state.bestArea,
     iteration: state.iteration,
-    topBorder: state.topBorder,
-    btmBorder: state.btmBorder,
+    topBorder: state.topBorder.join(', '),
+    btmBorder: state.btmBorder.join(', '),
     rangeArea: state.rangeArea,
     result: result,
     name: state.name
@@ -58,81 +61,62 @@ var numberOfAreas;
 var numberOfIterations;
 var upperLimit;
 var lowerLimit;
-
-
-function Algo(numberOfScoutsP,numberOfWorkersP,numberOfAreasP,numberOfIterationsP,upperLimitP,lowerLimitP) {
+var rangeOfArea;
+var numberOfVars;
+function Dot() {
+}
+function Algo(numberOfScoutsP,numberOfWorkersP,numberOfAreasP,numberOfIterationsP,upperLimitP,lowerLimitP, rangeOfAreaP, numberOfVarsP) {
   numberOfScouts=parseInt(numberOfScoutsP);
-   numberOfWorkers=parseInt(numberOfWorkersP);
-   numberOfAreas=parseInt(numberOfAreasP);
-   numberOfIterations=parseInt(numberOfIterationsP);
-    upperLimit=parseFloat(upperLimitP);
-  lowerLimit=parseFloat(lowerLimitP);
+  numberOfWorkers=parseInt(numberOfWorkersP);
+  numberOfAreas=parseInt(numberOfAreasP);
+  rangeOfArea=parseInt(rangeOfAreaP);
+  numberOfIterations=parseInt(numberOfIterationsP);
+  upperLimit=upperLimitP;
+  lowerLimit=lowerLimitP;
   best=new Array(numberOfAreas);
-    
- initiate();
- var pobedka = numberOfIterations/10;
-        for ( k = 0; k < numberOfIterations; k++) {
-            global();
-            console.log();
-            for (i = 0; i < best.length - 1; i++) {
-                var split = workersSplit(best);
-                local(split[i], best[i]);
-            }
-
-        }
-        return best[0].result;    
-    
-  }
-
-function initiate(){
-    var dots =new Array(numberOfScouts);
-    for(i=0; i<numberOfScouts; i++){
-        dots[i] = randomDotG(lowerLimit, upperLimit);
+  numberOfVars = parseInt(numberOfVarsP);
+  console.log(upperLimit);
+  initiate();
+  var pobedka = numberOfIterations/10;
+  var counter = 0;
+  var iterC=0;
+  for ( k = 0; k < numberOfIterations; k++) {
+    var current=best[0];
+    global();
+    for (var i = 0; i < best.length; i++) {
+      var split = workersSplit();
+      best[i]=local(split[i], best[i]);
     }
-    best = findMax(dots, numberOfAreas);
-}
-    
-function global(){
-     var dots = new Array(numberOfScouts - numberOfAreas);
-        for (i = 0; i < (numberOfScouts-numberOfAreas); i++) {
-            dots[i] = randomDotG(lowerLimit, upperLimit);
-            for (j = 0; j < numberOfAreas; j++) {
-                if (dots[i].result > best[best.length - j - 1].result){
-                    best[numberOfAreas - j-1] = dots[i];
-                    continue;
-                }
-            }
-        }
-}        
-
-function local(number, dot) {
-      var worker;
-        for (let i = 0; i < number; i++) {
-            worker = randomDotL(dot.x, dot.y, rangeOfArea);
-            if (dot.result < worker.result) {
-                dot=worker;
-            }
-        }
-}   
-    
-function findMax(dots, number){
-    var sorted = sortDots(dots);
-    var result = new Array(number);
-        for (i = 0; i < number; i++) {
-            result[i] = sorted[i];
-        }
-        return result;
-}
-    
-function  workersSplit(){
-  var part = 0;
-  for ( i = 0; i < numberOfAreas; i++) {
-    part += best[i].result;
+    best=sortDots(best);
+    console.log(best[0].result);
+    // iterC++;
+    // if(current.result==best[0].result){
+    //   counter++;
+    //   if(counter==pobedka){
+    //     var last = best[0];
+    //     best[0]=local(numberOfWorkers,best[0]);
+    //     if(last.result==best[0].result){
+    //       console.log("LAST", last.result)
+    //       break;
+    //     }
+    //   }
+    // }
+    // else{
+    //   counter=0;
+    // }
   }
-  part = part / numberOfAreas;
+  console.log(iterC);
+  console.log(best[0]);
+  return best[0].result;    
+}
+function  workersSplit(){
+  var sum = 0;
+  for ( var i = 0; i < numberOfAreas; i++) {
+    sum += best[i].result;
+  }
   var workersForArea = new Array(numberOfAreas);
-  for (i = 0; i < best.length - 1; i++) {
-    workersForArea[i] =  Math.round(best[i].result / part);
+  for (var i = 0; i < numberOfAreas; i++) {
+    workersForArea[i] =  Math.round(best[i].result / sum*numberOfWorkers);
   }
   return workersForArea;
 }  
@@ -151,20 +135,100 @@ function sortDots(dots) {
   }
   return dots;
 }
-    
-function randomDotG(lowerLimit, upperLimit) {
-  return new Dot(eval(lowerLimit + Math.random() * (upperLimit - lowerLimit)), eval(lowerLimit + Math.random() * (upperLimit - lowerLimit)));
+function initiate(){
+    var dots =new Array(numberOfScouts);
+    for(i=0; i<numberOfScouts; i++){
+        dots[i] = randomDotG();
+    }
+    best = findMax(dots, numberOfAreas);
+}
+function randomDotG() {
+  var dot = new Dot();
+  var VARS = vars.split(', ');
+  for (var i = 0; i < VARS.length; i++) {
+    dot[VARS[i]] = eval(lowerLimit[i] + Math.random() * (upperLimit[i] - lowerLimit[i]));
+  }
+  dot.result = mathModel(dot);
+  return dot;
 }
 
-function randomDotL(x, y, area) {
-  return new Dot(eval(x + Math.random() * (2*area)),  eval(y + Math.random() * (2*area)));
+function mathModel(dot){
+  var func = math.eval('f('+ vars + ') = ' + f)
+  var args = [];
+  for(var prop in dot){
+    if (toString(prop) != 'result') args.push(dot[prop])
+  }
+  return func(...args)
+}  
+
+function global(){
+     var dots = new Array(numberOfScouts - numberOfAreas);
+        for (var i = 0; i < (numberOfScouts-numberOfAreas); i++) {
+            dots[i] = randomDotG();
+            for (var j = 0; j < numberOfAreas; j++) {
+                if (dots[i].result > best[best.length - j - 1].result){
+                    best[numberOfAreas - j-1] = dots[i];
+                    continue;
+                }
+            }
+        }
+}        
+
+
+
+
+
+
+
+
+
+
+
+
+
+function local(number, dot) {
+  var worker;
+    for (let i = 0; i < number; i++) {
+        worker = randomDotL(dot);
+        if (dot.result < worker.result) {
+            dot=worker;
+        }
+    }
+    return dot;
+}   
+    
+function findMax(dots, number){
+    var sorted = sortDots(dots);
+    var result = new Array(number);
+        for (i = 0; i < number; i++) {
+            result[i] = sorted[i];
+        }
+        return result;
 }
     
-function Dot(x,y) {
-  this.result=mathModel(x,y);
+
+
+function randomDotL(dot) {
+  var args = [];
+  var arg = 0;
+    for(var prop in dot){
+      if (prop != 'result') args.push(dot[prop])
+    }
+    for (var i = 0; i <= args.length -1; i++) {
+      while(true){
+          arg = eval(args[i]-rangeOfArea + Math.random() * (2*rangeOfArea));
+          if(arg<upperLimit[i] && arg>lowerLimit[i]){
+            args[i] = arg;
+             break;
+          } 
+      }
+    }
+  var dot = new Dot();
+  var VARS = vars.split(', ');
+  for (var i = 0; i < VARS.length; i++) {
+    dot[VARS[i]] = args[i];
+  }
+  dot.result = mathModel;
+  return dot;
 }
-  
-function mathModel(x,y){
-  var func = math.eval('f(x, y) = ' + f)
-  return func(x,y)
-}
+    

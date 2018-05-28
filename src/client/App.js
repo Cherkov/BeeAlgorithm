@@ -8,15 +8,6 @@ export default class App extends Component {
     super(props);
     this.state = {
       route: window.location.hash.substr(1),
-      razv: 0,
-      furaj: 0,
-      bestArea:0,
-      iteration: 0,
-      func: '',
-      btmBorder: 0,
-      topBorder: 0,
-      rangeArea:0,
-      result:0,
     };
   }
   componentDidMount() {
