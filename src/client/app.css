@@ -67,7 +67,7 @@ button{
   margin: 0 auto;
 }
 .wrapper{
-  background-image: url('/public/img/bg.jpg');
+  background-image: url('/img/bg.jpg');
   
   position: relative;
 }

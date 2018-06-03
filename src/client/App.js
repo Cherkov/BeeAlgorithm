@@ -30,7 +30,7 @@ export default class App extends Component {
       <div>
       <header>
       <div className='rightNav'>
-        <img src='./public/img/logo.jpg'/>
+        <img src='./img/logo.jpg'/>
         <h1>Пчелиный алгоритм</h1>
         <ul>
         <li>
@@ -44,7 +44,7 @@ export default class App extends Component {
       </div>
       <div className='leftNav'>
         <a href="https://github.com/Cherkov/BeeAlgorithm">
-          <img src='./public/img/github.png'/>
+          <img src='./img/github.png'/>
         </a>
       </div>
       </header>

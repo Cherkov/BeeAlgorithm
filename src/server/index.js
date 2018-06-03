@@ -5,7 +5,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const MongoClient = require('mongodb').MongoClient;
 var vars;
-const url = "mongodb://localhost:27017/bee";
+const url = "mongodb://kaccel:greyka135@ds245240.mlab.com:45240/bee";
 var name;
 app.get('/api/getReport', function(req, res) {
   console.log(name);
@@ -54,7 +54,7 @@ app.post("/api/getUsername", function(req, res) {
 
 });
 } );
-app.listen(20017, () => console.log("Listening on port 8080!"));
+app.listen(14885, () => console.log("Listening on port 8080!"));
 var best;
 var numberOfScouts;
 var numberOfAreas;
