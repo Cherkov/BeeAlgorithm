@@ -149,6 +149,7 @@ function randomDotG() {
     dot[VARS[i]] = eval(lowerLimit[i] + Math.random() * (upperLimit[i] - lowerLimit[i]));
   }
   dot.result = mathModel(dot);
+  console.log(dot);
   return dot;
 }
 
