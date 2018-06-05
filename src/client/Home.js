@@ -22,19 +22,42 @@ export default class Home extends Component {
   }
   submitBtn(){
     console.log(this.props);
-    console.log(this.state)
-       fetch('/api/getUsername', {
-        method: 'post',
-        headers: {
-          'Accept': 'application/json, text/plain, */*',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(this.state)
+    console.log(this.state);
+    var flag = false;
+    var flag2 = false;
+    for(var prop in this.state){
+      if((prop == 'razv' || prop == 'furaj' || prop == 'bestArea' || prop == 'iteration' || prop == 'number') && (this.state[prop] == ''))
+      {
+        flag =  true;
+        console.log(prop);
+      }
+    }
+    for(var prop in this.state){
+      if((prop == 'razv' || prop == 'furaj' || prop == 'bestArea' || prop == 'iteration' || prop == 'rangeArea') && (this.state[prop] < 0))
+      {
+        flag2 = true;
+        console.log(prop);
+      }
+    }
+    if(flag){
+      alert('Заполните все поля');
+    } else if(flag2){
+      alert('Введите корректные даннные');
+    }
+    else {
+   fetch('/api/getUsername', {
+    method: 'post',
+    headers: {
+      'Accept': 'application/json, text/plain, */*',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(this.state)
       }).then(res=>res.json())
       .then(res => (this.setState({
         result: parseFloat(res.result.toFixed(2))
       })));
-  }
+}
+    }
   handleChange(event) {
     const target = event.target;
     const name = target.name;
